@@ -9,8 +9,8 @@ function convertToJson(res) {
 export default class ProductData {
   constructor(category) {
     this.category = category;
-    // Use absolute path from public root for Vite
-    this.path = `/src/json/${this.category}.json`;
+    // Use absolute path from public root for Vite (public directory)
+    this.path = `/json/${this.category}.json`;
   }
   getData() {
     return fetch(this.path)
@@ -19,6 +19,8 @@ export default class ProductData {
   }
   async findProductById(id) {
     const products = await this.getData();
+    console.log("All products loaded:", products);
+    console.log("Looking for ID:", id);
     return products.find((item) => item.Id === id);
   }
 }
