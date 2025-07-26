@@ -5,7 +5,7 @@ import { initLayout } from "./layout.js";
 function productCardTemplate(product) {
   let imgSrc = product.Image.startsWith("../") ? product.Image.replace("../", "/") : product.Image;
   return `<li class="product-card">
-    <a href="product_pages/${product.Id.toLowerCase()}.html">
+    <a href="product.html?id=${product.Id}">
       <img src="${imgSrc}" alt="${product.NameWithoutBrand}" />
       <h3 class="card__brand">${product.Brand?.Name || ""}</h3>
       <h2 class="card__name">${product.NameWithoutBrand}</h2>
