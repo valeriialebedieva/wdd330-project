@@ -1,4 +1,5 @@
 import ProductData from "./ProductData.mjs";
+import { initLayout } from "./layout.js";
 
 // Helper to create product card HTML
 function productCardTemplate(product) {
@@ -21,4 +22,7 @@ async function renderProductList() {
   productList.innerHTML = products.map(productCardTemplate).join("");
 }
 
-document.addEventListener("DOMContentLoaded", renderProductList);
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout();
+  renderProductList();
+});
