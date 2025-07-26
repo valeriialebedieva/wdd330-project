@@ -4,7 +4,7 @@ import { setLocalStorage, getLocalStorage } from "./utils.mjs";
 
 function getProductIdFromQuery() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("id");
+  return params.get("product");
 }
 
 function productDetailTemplate(product) {
@@ -39,18 +39,28 @@ function addProductToCart(product) {
 async function renderProductDetail() {
   const id = getProductIdFromQuery();
   if (!id) return;
+  
   const dataSource = new ProductData("tents");
   const product = await dataSource.findProductById(id);
   const detailSection = document.getElementById("product-detail");
+  
   if (!product) {
     detailSection.innerHTML = `<p>Product not found.</p>`;
     return;
   }
+  
   detailSection.innerHTML = productDetailTemplate(product);
-  document.getElementById("addToCart").addEventListener("click", () => addProductToCart(product));
+  
+  // Add event listener for the add to cart button
+  const addToCartButton = document.getElementById("addToCart");
+  if (addToCartButton) {
+    addToCartButton.addEventListener("click", () => addProductToCart(product));
+  }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  initLayout();
-  renderProductDetail();
-}); 
+// Only run if we're on a product page
+if (getProductIdFromQuery()) {
+  document.addEventListener("DOMContentLoaded", () => {
+    renderProductDetail();
+  });
+} 

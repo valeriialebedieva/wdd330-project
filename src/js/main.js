@@ -5,7 +5,7 @@ import { initLayout } from "./layout.js";
 function productCardTemplate(product) {
   let imgSrc = product.Image.startsWith("../") ? product.Image.replace("../", "/") : product.Image;
   return `<li class="product-card">
-    <a href="product.html?id=${product.Id}">
+    <a href="?product=${product.Id}">
       <img src="${imgSrc}" alt="${product.NameWithoutBrand}" />
       <h3 class="card__brand">${product.Brand?.Name || ""}</h3>
       <h2 class="card__name">${product.NameWithoutBrand}</h2>
@@ -22,7 +22,34 @@ async function renderProductList() {
   productList.innerHTML = products.map(productCardTemplate).join("");
 }
 
+function checkForProductView() {
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("product");
+  
+  const hero = document.getElementById("hero");
+  const products = document.getElementById("products");
+  const productDetail = document.getElementById("product-detail");
+  
+  if (productId) {
+    // Show product detail, hide main content
+    if (hero) hero.style.display = "none";
+    if (products) products.style.display = "none";
+    if (productDetail) productDetail.style.display = "block";
+  } else {
+    // Show main content, hide product detail
+    if (hero) hero.style.display = "block";
+    if (products) products.style.display = "block";
+    if (productDetail) productDetail.style.display = "none";
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initLayout();
+  checkForProductView();
   renderProductList();
+});
+
+// Listen for browser back/forward buttons
+window.addEventListener("popstate", () => {
+  checkForProductView();
 });
